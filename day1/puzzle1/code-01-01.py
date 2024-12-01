@@ -54,7 +54,7 @@ class LocationSolver :
       x = re.split( "\s+", line )
       i = 0
       while i < len(x) and i < numLists :
-        DebugPrinter.debugPrint( "Adding " + x[i] + "to list " + str(i) )
+        DebugPrinter.debugPrint( "Adding " + x[i] + " to list " + str(i) )
         lists[ i ].append( int(x[ i ]) )
         i += 1
 

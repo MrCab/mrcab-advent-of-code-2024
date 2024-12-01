@@ -60,7 +60,7 @@ class LocationSolver :
 
       # put this in because I goofed on the first pass and forgot i += 1
       # But why is this broken...
-      y = int(x[0])
+      y = int(x[1]) # this was wrong the first time
       if y in self.list2Count :
         self.list2Count[y] += 1
       else :
@@ -92,6 +92,8 @@ class LocationSolver :
     i = 0
     while i < len(self.list1) :
       x = self.list1[i]
+      # if this used the self.list2count it needs to check if the key exists first
+      # but now we remembered i += 1 so the loop actually finished
       sum += x * self.list2.count(x)
       i += 1 # yeah forgot this the first time
     print ( str( sum ) )
