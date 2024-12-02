@@ -59,14 +59,14 @@ class ReactorSolver :
 
   def isReportSafeUp ( self, report ) :
     for i in range ( 0, ( len(report) - 1 ) ) :
-      if report[i+1] - report[i] not in range (1,4) :
+      if report[i+1] - report[i] not in range (1, 1+self.safeValue) :
         DebugPrinter.debugPrint ( "Failed Up on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
         return False
     return True
   
   def isReportSafeDown ( self, report ) :
     for i in range ( 0, ( len(report) - 1 ) ) :
-      if report[i+1] - report[i] not in range (-3,0) :
+      if report[i+1] - report[i] not in range (0-self.safeValue, 0) :
         DebugPrinter.debugPrint ( "Failed Down on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
         return False
     return True
