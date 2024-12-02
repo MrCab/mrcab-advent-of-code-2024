@@ -57,32 +57,42 @@ class ReactorSolver :
     self.reports = splitReports
 
     ###########
-  """
-  3 5 2 1
-  5 3 2 1
-  3 1 2 1 
-  10 2 7 4 2
-  """
-    #############
 
-  def isReportSafeUp ( self, report, dampened = 0 ) :
-    for i in range ( 0, ( len(report) - 1 ) ) :
-      if report[i+1] - report[i] not in range (1, 1+self.safeValue) :
-        DebugPrinter.debugPrint ( "Failed Up on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
-        if dampened < self.dampenCapacity :
-          reportLessI = report.copy()
-          reportLessIAnd1 = report.copy()
+  # def isReportSafeUp ( self, report, dampened = 0 ) :
+  #   for i in range ( 0, ( len(report) - 1 ) ) :
+  #     if report[i+1] - report[i] not in range (1, 1+self.safeValue) :
+  #       DebugPrinter.debugPrint ( "Failed Up on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
+  #       if dampened < self.dampenCapacity :
+  #         reportLessI = report.copy()
+  #         reportLessIAnd1 = report.copy()
 
-          del reportLessI[i]
-          del reportLessIAnd1[i+1]
-          return ( self.isReportSafeUp( reportLessI, dampened+1 ) or self.isReportSafeUp( reportLessIAnd1, dampened+1 ) )
-        else:
-          return False
-    return True
+  #         del reportLessI[i]
+  #         del reportLessIAnd1[i+1]
+  #         return ( self.isReportSafeUp( reportLessI, dampened+1 ) or self.isReportSafeUp( reportLessIAnd1, dampened+1 ) )
+  #       else:
+  #         return False
+  #   return True
   
-  def isReportSafeDown ( self, report, dampened = 0 ) :
+  # def isReportSafeDown ( self, report, dampened = 0 ) :
+  #   for i in range ( 0, ( len(report) - 1 ) ) :
+  #     if report[i+1] - report[i] not in range (0-self.safeValue, 0) :
+  #       DebugPrinter.debugPrint ( "Failed Down on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
+  #       if dampened < self.dampenCapacity :
+  #         reportLessI = report.copy()
+  #         reportLessIAnd1 = report.copy()
+
+  #         del reportLessI[i]
+  #         del reportLessIAnd1[i+1]
+  #         return ( self.isReportSafeDown( reportLessI, dampened+1 ) or self.isReportSafeDown( reportLessIAnd1, dampened+1 ) )
+  #       else:
+  #         return False
+  #       return False
+  #   return True
+  
+  def isReportSafeEitherWay ( self, report, myRange, dampened = 0 ) :
     for i in range ( 0, ( len(report) - 1 ) ) :
-      if report[i+1] - report[i] not in range (0-self.safeValue, 0) :
+      #if report[i+1] - report[i] not in range(myRange[0], myRange[1] ) :
+      if report[i+1] - report[i] not in myRange :
         DebugPrinter.debugPrint ( "Failed Down on i=%d - %d and %d" % ( i, report[i], report[i+1]) )
         if dampened < self.dampenCapacity :
           reportLessI = report.copy()
@@ -90,7 +100,7 @@ class ReactorSolver :
 
           del reportLessI[i]
           del reportLessIAnd1[i+1]
-          return ( self.isReportSafeDown( reportLessI, dampened+1 ) or self.isReportSafeDown( reportLessIAnd1, dampened+1 ) )
+          return ( self.isReportSafeEitherWay( reportLessI, myRange, dampened+1 ) or self.isReportSafeEitherWay( reportLessIAnd1, myRange, dampened+1 ) )
         else:
           return False
         return False
@@ -102,7 +112,8 @@ class ReactorSolver :
     countSafe = 0
     for report in self.reports :
       DebugPrinter.debugPrint ( "TESTING - " + str(report ) )
-      if ( self.isReportSafeUp( report ) or self.isReportSafeDown( report ) ) :
+      ###if ( self.isReportSafeUp( report ) or self.isReportSafeDown( report ) ) :
+      if ( self.isReportSafeEitherWay( report, range(1, 1+self.safeValue) ) or self.isReportSafeEitherWay( report, range(0-self.safeValue, 0 ) ) ) :
         DebugPrinter.debugPrint ( "Success - " + str(report ) )
         countSafe +=1
       else :
