@@ -1,5 +1,6 @@
 import re
 import argparse
+from fractions import Fraction
 
 class DebugPrinter :
 
@@ -85,7 +86,7 @@ class WifiSolver :
     print( len( self.antiNodes.keys() ) )
 
 ######
-  def markAntinodes( self, loc1, loc2 ) :
+  def markAntinodes1( self, loc1, loc2 ) :
     delX = loc1[0] - loc2[0]
     delY = loc1[1] - loc2[1]
 
@@ -94,6 +95,29 @@ class WifiSolver :
 
     self.flagAntinode( anode1 )
     self.flagAntinode( anode2 )
+
+######
+  def markAntinodes( self, loc1, loc2 ) :
+    delX = loc1[0] - loc2[0]
+    delY = loc1[1] - loc2[1]
+
+    # NOTE - THIS SHOULD FAIL FOR A HORIZONTAL LINE WHERE delY = 0
+    # should say if delY = 0 then slopeX = 1, slopeY = 0, and proceed
+    slope = Fraction( delX, delY )
+    slopeX = slope.numerator
+    slopeY = slope.denominator
+
+    mark = loc1
+    while ( 0 <= mark[0] < self.xLen ) and mark[1] in range( 0, self.yLen ) :
+      self.flagAntinode( mark )
+      mark = ( mark[0] + slopeX, mark[1] + slopeY )
+      #anode1 = ( ( loc1[0] + ( delX)), ( loc1[1] + ( delY) ) )
+
+    mark = loc1
+    while ( 0 <= mark[0] < self.xLen ) and mark[1] in range( 0, self.yLen ) :
+      self.flagAntinode( mark )
+      mark = ( mark[0] - slopeX, mark[1] - slopeY )
+      #anode2 = ( ( loc2[0] - ( delX)), ( loc2[1] - ( delY) ) )
 
 ######
   def flagAntinode( self, loc ) :
